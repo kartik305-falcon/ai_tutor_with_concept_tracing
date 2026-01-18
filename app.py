@@ -16,7 +16,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🧠 AI Tutor for C Programming")
+st.title("🧠 AI Tutor")
 
 
 # =========================
