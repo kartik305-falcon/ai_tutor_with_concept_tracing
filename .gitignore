@@ -1,0 +1,3 @@
+*.db
+vectordb/
+__pycache__/
