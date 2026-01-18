@@ -1,0 +1,30 @@
+# Core App
+streamlit==1.32.2
+python-dotenv==1.0.1
+
+# LLM (Gemini)
+google-generativeai==0.3.2
+
+# Vector Database
+chromadb==0.4.22
+
+# Embeddings
+sentence-transformers==2.6.1
+torch>=2.0.0
+
+# PDF Processing
+PyMuPDF==1.23.26
+
+# Image Processing & OCR
+pillow==10.2.0
+pytesseract==0.3.10
+
+# Data Handling
+pandas==2.2.0
+numpy==1.26.4
+
+# ML / Analytics
+scikit-learn==1.4.0
+
+# Utilities
+tqdm==4.66.1

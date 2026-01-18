@@ -1,0 +1,3 @@
+A.5	Objects and Lvalues
+An Object is a named region of storage; an lvalue is an expression referring to an object. An obvious example of an lvalue expression is an identifier with suitable type and storage class. There are operators that yield lvalues, if E is an expression of pointer type, then *E is an lvalue expression referring to the object to which E points. The name ``lvalue'' comes from the assignment expression E1 = E2 in which the left operand E1 must be an lvalue expression. The
+  discussion of each operator specifies whether it expects lvalue operands and whether it yields an lvalue.
