@@ -1,5 +1,4 @@
 import fitz  # PyMuPDF
-import pytesseract
 from PIL import Image
 
 def load_pdf(file):
@@ -10,5 +9,4 @@ def load_pdf(file):
     return text
 
 def load_image(file):
-    img = Image.open(file)
-    return pytesseract.image_to_string(img)
+    return "Image uploaded. OCR disabled on cloud."
