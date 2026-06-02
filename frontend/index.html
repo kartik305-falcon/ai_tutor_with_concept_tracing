@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeTutor AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <span class="brand-icon">✦</span> CodeTutor <span class="brand-highlight">AI</span>
+            </div>
+
+            <!-- Language Selector -->
+            <div class="sidebar-section">
+                <div class="section-title">Language</div>
+                <div class="nav-pills" id="language-selector">
+                    <button class="nav-pill active" data-lang="C">⚙️ C</button>
+                    <button class="nav-pill" data-lang="Python">🐍 Python</button>
+                    <button class="nav-pill" data-lang="Java">☕ Java</button>
+                    <button class="nav-pill" data-lang="JavaScript">🟨 JS</button>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="sidebar-section">
+                <div class="section-title">Navigation</div>
+                <nav class="main-nav" id="main-nav">
+                    <button class="nav-item active" data-view="chat">💬 Tutor Chat</button>
+                    <button class="nav-item" data-view="practice">🧪 Code Practice</button>
+                    <button class="nav-item" data-view="mastery">📊 Concept Mastery</button>
+                    <button class="nav-item" data-view="quiz">🧠 Quiz</button>
+                    <button class="nav-item" data-view="debug">🖼️ Error Debugger</button>
+                    <button class="nav-item" data-view="duel">⚔️ Code Duel</button>
+                    <button class="nav-item" data-view="github">🔗 GitHub Review</button>
+                    <button class="nav-item" data-view="path">🗺️ Learning Path</button>
+                </nav>
+            </div>
+
+            <!-- Socratic Toggle (Chat only) -->
+            <div class="sidebar-section" id="socratic-section">
+                <div class="section-title">Tutor Mode</div>
+                <button id="socratic-toggle" class="socratic-btn" title="Socratic Mode: AI guides with questions instead of giving answers">
+                    🎓 Socratic Mode <span id="socratic-status">OFF</span>
+                </button>
+            </div>
+
+            <!-- XP Bar -->
+            <div class="sidebar-footer">
+                <div id="xp-widget" class="xp-widget">
+                    <div class="xp-header">
+                        <span id="xp-level-name">Novice</span>
+                        <span id="xp-streak">🔥 0</span>
+                    </div>
+                    <div class="xp-bar-track">
+                        <div class="xp-bar-fill" id="xp-bar-fill" style="width:0%"></div>
+                    </div>
+                    <div class="xp-footer-row">
+                        <span id="xp-total">0 XP</span>
+                        <span id="xp-next" style="font-size:0.7rem;color:var(--text-secondary)"></span>
+                    </div>
+                </div>
+                <div class="version">v3.0 Premium Edition</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header glass-panel">
+                <div>
+                    <h1 id="page-title">💬 Tutor Chat <span class="lang-badge" id="current-lang-badge">C</span></h1>
+                    <p id="page-subtitle">Ask questions about C and get step-by-step explanations.</p>
+                </div>
+                <!-- Study Notes button (visible only in chat view) -->
+                <div id="notes-btn-wrap" class="notes-action-wrap">
+                    <button id="generate-notes-btn" class="btn-secondary" title="Generate study notes from this chat session">📝 Generate Notes</button>
+                </div>
+            </header>
+
+            <div class="views-container">
+
+                <!-- ═══════════════════ CHAT VIEW ═══════════════════ -->
+                <div id="view-chat" class="view active">
+                    <div class="upload-section glass-panel">
+                        <label for="file-upload" class="upload-label">
+                            <span class="upload-icon">📎</span> Attach study material (PDF/Image)
+                        </label>
+                        <input type="file" id="file-upload" class="hidden-input" accept=".pdf,.png,.jpg,.jpeg">
+                        <div id="upload-status" class="status-msg"></div>
+                    </div>
+
+                    <div class="chat-container glass-panel" id="chat-history">
+                        <div class="empty-state">
+                            <div class="empty-icon">✦</div>
+                            <div>Start by asking a question below</div>
+                        </div>
+                    </div>
+
+                    <!-- Study Notes Panel -->
+                    <div id="notes-panel" class="glass-panel hidden" style="margin-top:1rem; padding:1.5rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                            <div style="font-size:1rem; font-weight:600; color:var(--accent-primary);">📝 Study Notes</div>
+                            <div style="display:flex;gap:0.5rem;">
+                                <button id="export-pdf-btn" class="btn-secondary" style="font-size:0.8rem;">⬇️ Export PDF</button>
+                                <button id="close-notes-btn" class="btn-secondary" style="font-size:0.8rem; background:transparent;">✕</button>
+                            </div>
+                        </div>
+                        <div id="notes-content"></div>
+                    </div>
+
+                    <div class="chat-input-container glass-panel">
+                        <button id="voice-btn" title="Voice Input (Chrome/Edge only)" style="background:transparent;border:none;cursor:pointer;font-size:1.3rem;padding:0 0.5rem;transition:0.2s;" aria-label="Voice input">🎤</button>
+                        <input type="text" id="chat-input" placeholder="Ask me anything about C programming..." autocomplete="off">
+                        <button id="chat-send" class="btn-primary">Send</button>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════ PRACTICE VIEW ═══════════════════ -->
+                <div id="view-practice" class="view">
+                    <div class="practice-grid">
+                        <div class="editor-section glass-panel">
+                            <div class="section-header">Editor</div>
+                            <textarea id="code-editor" spellcheck="false"></textarea>
+                        </div>
+                        <div class="testcases-section glass-panel">
+                            <div class="section-header" style="display:flex; justify-content:space-between; align-items:center;">
+                                <span>Test Cases <span class="hint">in => exp</span></span>
+                                <button id="gen-scenario" style="background:transparent; border:1px solid var(--accent-primary); color:var(--accent-primary); border-radius:4px; padding:0.2rem 0.6rem; cursor:pointer; font-size:0.8rem; transition:0.2s;">✨ AI Challenge</button>
+                            </div>
+                            <textarea id="test-cases" spellcheck="false"></textarea>
+                            <button id="run-code" class="btn-primary full-width mt-4">▶ Run & Grade</button>
+                        </div>
+                    </div>
+                    <div id="practice-results" class="results-container glass-panel hidden mt-4"></div>
+                </div>
+
+                <!-- ═══════════════════ MASTERY VIEW ═══════════════════ -->
+                <div id="view-mastery" class="view">
+                    <div class="mastery-dashboard" id="mastery-dashboard"></div>
+                </div>
+
+                <!-- ═══════════════════ QUIZ VIEW ═══════════════════ -->
+                <div id="view-quiz" class="view">
+                    <div class="quiz-container glass-panel" id="quiz-container">
+                        <div class="empty-state" id="quiz-empty-state">
+                            <div class="empty-icon">🧠</div>
+                            <div>Generate a quiz tailored to your weak concepts</div>
+                            <button id="generate-quiz" class="btn-primary mt-4">✦ Generate Quiz</button>
+                        </div>
+                        <div id="quiz-content" class="hidden"></div>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════ IMAGE DEBUGGER VIEW ═══════════════════ -->
+                <div id="view-debug" class="view">
+                    <div class="glass-panel" style="padding:1.5rem; margin-bottom:1rem;">
+                        <div class="section-header">🖼️ Upload Error Screenshot</div>
+                        <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:1rem;">
+                            Take a screenshot of your compiler error, wrong output, or buggy code. The AI will explain the <strong>concept</strong> behind the error — not just how to fix it.
+                        </p>
+                        <div class="debug-upload-zone" id="debug-upload-zone">
+                            <input type="file" id="debug-file-input" accept="image/*" class="hidden-input">
+                            <div id="debug-upload-preview">
+                                <div style="font-size:2.5rem;margin-bottom:0.5rem;">📸</div>
+                                <div style="color:var(--text-secondary);font-size:0.9rem;">Click to upload or drag &amp; drop your screenshot</div>
+                            </div>
+                        </div>
+                        <button id="debug-analyze-btn" class="btn-primary mt-4" disabled>🔍 Analyze Error</button>
+                    </div>
+
+                    <div id="debug-results" class="hidden">
+                        <!-- Concept explanation cards injected here -->
+                    </div>
+                </div>
+
+                <!-- ═══════════════════ CODE DUEL VIEW ═══════════════════ -->
+                <div id="view-duel" class="view">
+                    <div id="duel-lobby" class="glass-panel" style="padding:2rem; text-align:center;">
+                        <div style="font-size:3rem;margin-bottom:1rem;">⚔️</div>
+                        <div style="font-size:1.2rem;font-weight:600;color:var(--accent-primary);margin-bottom:0.5rem;">Solo Code Duel</div>
+                        <div style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem;">Race the clock! Get an AI-generated challenge and solve it before time runs out.</div>
+                        <div class="difficulty-picker" style="display:flex;gap:0.75rem;justify-content:center;margin-bottom:1.5rem;">
+                            <button class="diff-btn active" data-diff="easy">🟢 Easy (5 min)</button>
+                            <button class="diff-btn" data-diff="medium">🟡 Medium (3 min)</button>
+                            <button class="diff-btn" data-diff="hard">🔴 Hard (2 min)</button>
+                        </div>
+                        <button id="duel-start-btn" class="btn-primary" style="padding:0.6rem 2rem;">⚔️ Start Duel</button>
+                    </div>
+
+                    <div id="duel-arena" class="hidden">
+                        <div class="duel-header glass-panel" style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;margin-bottom:1rem;">
+                            <div id="duel-problem-title" style="font-weight:600;color:var(--accent-primary);">Challenge Loading...</div>
+                            <div id="duel-timer" style="font-size:1.5rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--warning);">3:00</div>
+                        </div>
+                        <div id="duel-description" class="glass-panel" style="padding:1rem 1.5rem;margin-bottom:1rem;font-size:0.9rem;line-height:1.6;"></div>
+                        <div class="practice-grid">
+                            <div class="editor-section glass-panel">
+                                <div class="section-header">Your Solution</div>
+                                <textarea id="duel-code-editor" spellcheck="false"></textarea>
+                            </div>
+                            <div class="testcases-section glass-panel">
+                                <div class="section-header">Test Cases</div>
+                                <textarea id="duel-test-cases" spellcheck="false"></textarea>
+                                <button id="duel-submit-btn" class="btn-primary full-width mt-4">⚔️ Submit Solution</button>
+                            </div>
+                        </div>
+                        <div id="duel-results" class="hidden glass-panel mt-4" style="padding:1.5rem;"></div>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════ GITHUB REVIEW VIEW ═══════════════════ -->
+                <div id="view-github" class="view">
+                    <div class="glass-panel" style="padding:1.5rem;margin-bottom:1rem;">
+                        <div class="section-header">🔗 GitHub Code Review</div>
+                        <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:1rem;">
+                            Paste a public GitHub file URL. The AI will fetch the code and give a detailed review: quality rating, bugs, style tips, and optimizations.
+                        </p>
+                        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+                            <input type="text" id="github-url-input" placeholder="https://github.com/user/repo/blob/main/main.c" style="flex:1;min-width:280px;">
+                            <button id="github-review-btn" class="btn-primary">🔍 Review Code</button>
+                        </div>
+                        <div id="github-status" class="status-msg mt-4"></div>
+                    </div>
+                    <div id="github-results" class="hidden"></div>
+                </div>
+
+                <!-- ═══════════════════ LEARNING PATH VIEW ═══════════════════ -->
+                <div id="view-path" class="view">
+                    <div class="glass-panel" style="padding:1.5rem;margin-bottom:1rem;">
+                        <div class="section-header">🗺️ Your Personalized 7-Day Learning Path</div>
+                        <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:1rem;">
+                            Based on your concept mastery data, the AI designs a custom week of study — step by step, day by day.
+                        </p>
+                        <button id="generate-path-btn" class="btn-primary">✨ Generate My Learning Path</button>
+                    </div>
+                    <div id="path-results" class="hidden"></div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>

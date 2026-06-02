@@ -1,0 +1,30 @@
+# Environment & secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Vector DB (large, rebuilt on deploy)
+vectordb/
+
+# SQLite databases (local state)
+*.db
+
+# Tesseract Windows binary
+*.exe
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
